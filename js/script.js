@@ -22,10 +22,22 @@ function buildNewDeck() {
       let card = { Value: values[j], Suit: suits[i] };
       deck.push(card);
     }
-    console.log(deck);
   }
+  return deck;
 }
-buildNewDeck();
 
-// Shuffl
+// Shuffle the deck we generated
+function shuffleDeck(deck) {
+  let temp;
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    temp = deck[i];
+    deck[i] = deck[j];
+    deck[j] = temp;
+  }
+  return deck;
+}
 function newGame() {}
+
+var deck1 = buildNewDeck();
+console.log(shuffleDeck(deck1));
