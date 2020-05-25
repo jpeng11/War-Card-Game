@@ -37,7 +37,21 @@ function shuffleDeck(deck) {
   }
   return deck;
 }
+
+// Split new deck equality to player & computer
+function splitDeck(deck) {
+  for (let i = 0; i < deck.length; i++) {
+    if (i % 2 === 0) {
+      playerDeck.push(deck[i]);
+    } else {
+      compDeck.push(deck[i]);
+    }
+  }
+  return [playerDeck, compDeck];
+}
+
 function newGame() {}
 
 var deck1 = buildNewDeck();
-console.log(shuffleDeck(deck1));
+shuffleDeck(deck1);
+console.log(splitDeck(deck1));
