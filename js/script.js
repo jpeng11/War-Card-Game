@@ -62,7 +62,7 @@ function dealCard() {
   let playerCard = playerDeck.shift();
   let compCard = compDeck.shift();
 
-  playerDraw.textContent = `${playerCard.Value}${playerCard.Suit}`;
+  playerDraw.innerHTML = `${playerCard.Value}${playerCard.Suit}`;
   compDraw.innerHTML = `${compCard.Value}${compCard.Suit}`;
 
   // Convert A,J,Q,K to number
@@ -162,6 +162,11 @@ function convertValue(cardValue) {
   return cardValue;
 }
 function checkWin() {}
-function newGame() {}
+function newGame() {
+  let playerDeck = [],
+    compDeck = [];
+  playerDraw.innerHTML = "";
+  compDraw.innerHTML = "";
+}
 
-var deck1 = buildNewDeck();
+buildNewDeck();
