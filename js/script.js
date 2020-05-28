@@ -16,6 +16,12 @@ const scoreComp = document.querySelector("#scoreComputer");
 const playerDraw = document.querySelector(".playerDraw");
 const compDraw = document.querySelector(".compDraw");
 const total = document.querySelector("#total");
+const playerCardsLeft = document.querySelector("#playerCardsLeft");
+const compCardsLeft = document.querySelector("#compCardsLeft");
+const msg = document.querySelector("#msg");
+
+scorePlayer.innerHTML = 0;
+scoreComp.innerHTML = 0;
 
 /*----- event listeners -----*/
 document.querySelector("#newGame").addEventListener("click", newGame);
@@ -56,6 +62,8 @@ function splitDeck(deck) {
       compDeck.push(deck[i]);
     }
   }
+  playerCardsLeft.innerHTML = playerDeck.length;
+  compCardsLeft.innerHTML = compDeck.length;
   return [playerDeck, compDeck];
 }
 
@@ -73,23 +81,21 @@ function dealCard() {
 
   if (playerCardValue === compCardValue) {
     warTempDeck.push(compCard, playerCard);
-
-    //console.log("-----WAR-----");
     handleWar();
   } else if (playerCardValue > compCardValue) {
     playerScore += 1;
     playerDeck.push(playerCard, compCard);
+    scorePlayer.innerHTML = playerScore;
   } else {
     compScore += 1;
     compDeck.push(compCard, playerCard);
+    scoreComp.innerHTML = compScore;
   }
-  // console.log(playerDeck);
-  // console.log(compDeck);
-  // console.log("---------");
-  total.innerHTML = playerDeck.length + compDeck.length;
+  playerCardsLeft.innerHTML = playerDeck.length;
+  compCardsLeft.innerHTML = compDeck.length;
 }
 
-function handleWar(card) {
+function handleWar() {
   let playerWarCard = [],
     compWarCard = [];
 
@@ -136,17 +142,19 @@ function handleWar(card) {
     playerDeck = playerDeck.concat(warTempDeck);
     // Clear temporary array
     warTempDeck = [];
-    playerScore = tempDeck.length + warTempDeck.length;
+    playerScore += tempDeck.length + warTempDeck.length;
+    scorePlayer.innerHTML = playerScore;
   } else {
     // Merge cards played on war round into computer's deck
     compDeck = compDeck.concat(tempDeck);
     compDeck = compDeck.concat(warTempDeck);
     // Clear temporary array
     warTempDeck = [];
-    compScore = tempDeck.length + warTempDeck.length;
+    compScore += tempDeck.length + warTempDeck.length;
+    scoreComp.innerHTML = compScore;
   }
 }
-
+// Convert A,J,Q,K into number
 function convertValue(cardValue) {
   switch (cardValue) {
     case "A":
@@ -162,15 +170,27 @@ function convertValue(cardValue) {
       cardValue = 13;
       break;
   }
+  // Convert passed in value from string to number
   cardValue = parseInt(cardValue, 10);
   return cardValue;
 }
-function checkWin() {}
+function checkWin() {
+  if (playerDeck.length === 0) {
+    msg.innerHTML = "Player Wins";
+  }
+  if (compDeck.length === 0) {
+    msg.innerHTML = "Computer Wins";
+  }
+}
 function newGame() {
   let playerDeck = [],
     compDeck = [];
   playerDraw.innerHTML = "";
   compDraw.innerHTML = "";
+  scorePlayer.innerHTML = 0;
+  scoreComp.innerHTML = 0;
+  playerCardsLeft.innerHTML = 0;
+  compCardsLeft.innerHTML = 0;
 }
 
 buildNewDeck();
