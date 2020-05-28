@@ -7,6 +7,7 @@ let suits = ["\u2660", "\u2666", "\u2663", "\u2665"];
 let values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 let playerScore = 0,
   compScore = 0;
+// Store draw on War if max card value of player's and computer's draw are the same
 let warTempDeck = [];
 
 /*----- cached element references -----*/
@@ -14,6 +15,7 @@ const scorePlayer = document.querySelector("#scorePlayer");
 const scoreComp = document.querySelector("#scoreComputer");
 const playerDraw = document.querySelector(".playerDraw");
 const compDraw = document.querySelector(".compDraw");
+const total = document.querySelector("#total");
 
 /*----- event listeners -----*/
 document.querySelector("#newGame").addEventListener("click", newGame);
@@ -70,7 +72,9 @@ function dealCard() {
   let compCardValue = convertValue(compCard.Value);
 
   if (playerCardValue === compCardValue) {
-    console.log("-----WAR-----");
+    warTempDeck.push(compCard, playerCard);
+
+    //console.log("-----WAR-----");
     handleWar();
   } else if (playerCardValue > compCardValue) {
     playerScore += 1;
@@ -79,12 +83,13 @@ function dealCard() {
     compScore += 1;
     compDeck.push(compCard, playerCard);
   }
-  console.log(playerDeck);
-  console.log(compDeck);
-  console.log("---------");
+  // console.log(playerDeck);
+  // console.log(compDeck);
+  // console.log("---------");
+  total.innerHTML = playerDeck.length + compDeck.length;
 }
 
-function handleWar() {
+function handleWar(card) {
   let playerWarCard = [],
     compWarCard = [];
 
@@ -119,27 +124,26 @@ function handleWar() {
 
   let playerWarMax = convertValue(playerMax.Value);
   let compWarMax = convertValue(compMax.Value);
+  // Compare biggest card from each side and determine who wins
   if (playerWarMax === compWarMax) {
+    // If biggest number are the same,
+    // Store cards played on this round into temporary array and run the war again
     warTempDeck.concat(tempDeck);
     handleWar();
   } else if (playerWarMax > compWarMax) {
-    if (warTempDeck.length > 0) {
-      playerDeck.concat(tempDeck);
-      playerDeck.concat(warTempDeck);
-      playerScore = tempDeck.length + warTempDeck.length;
-    } else {
-      playerDeck.concat(tempDeck);
-      playerScore += tempDeck.length;
-    }
+    // Merge cards played on war round into player's deck
+    playerDeck = playerDeck.concat(tempDeck);
+    playerDeck = playerDeck.concat(warTempDeck);
+    // Clear temporary array
+    warTempDeck = [];
+    playerScore = tempDeck.length + warTempDeck.length;
   } else {
-    if (warTempDeck.length > 0) {
-      compDeck.concat(tempDeck);
-      compDeck.concat(warTempDeck);
-      compScore = tempDeck.length + warTempDeck.length;
-    } else {
-      compDeck.concat(tempDeck);
-      compScore += tempDeck.length;
-    }
+    // Merge cards played on war round into computer's deck
+    compDeck = compDeck.concat(tempDeck);
+    compDeck = compDeck.concat(warTempDeck);
+    // Clear temporary array
+    warTempDeck = [];
+    compScore = tempDeck.length + warTempDeck.length;
   }
 }
 
