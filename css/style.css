@@ -32,3 +32,23 @@ body {
 .gameTable {
   grid-area: gameTable;
 }
+
+.playerDraw {
+  width: 100px;
+  height: 100px;
+  display: block;
+  font-size: 50px;
+  float: right;
+}
+
+.compDraw {
+  width: 100px;
+  height: 100px;
+  display: block;
+  font-size: 50px;
+  float: left;
+}
+
+#draw {
+  margin-top: 100px;
+}
