@@ -1,6 +1,6 @@
 # War Card Game
 
-_Simple war card game using JavaScript, HTML and CSS_
+_Simple war card game using JavaScript, HTML and CSS_<br/>
 Game can be played at https://jpeng11.github.io/War-Card-Game/
 
 ## Game Rules
