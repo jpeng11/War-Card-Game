@@ -54,6 +54,9 @@ body {
 }
 
 #msg {
+  text-align: center;
+}
+#warMsg {
   color: red;
   text-align: center;
 }

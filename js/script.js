@@ -9,16 +9,19 @@ let playerScore = 0,
   compScore = 0;
 // Store draw on War if max card value of player's and computer's draw are the same
 let warTempDeck = [];
+let war = false;
 
 /*----- cached element references -----*/
 const scorePlayer = document.querySelector("#scorePlayer");
 const scoreComp = document.querySelector("#scoreComputer");
+const draw = document.querySelector("#draw");
 const playerDraw = document.querySelector(".playerDraw");
 const compDraw = document.querySelector(".compDraw");
 const total = document.querySelector("#total");
 const playerCardsLeft = document.querySelector("#playerCardsLeft");
 const compCardsLeft = document.querySelector("#compCardsLeft");
 const msg = document.querySelector("#msg");
+const warMsg = document.querySelector("#warMsg");
 
 scorePlayer.innerHTML = 0;
 scoreComp.innerHTML = 0;
@@ -69,12 +72,13 @@ function splitDeck(deck) {
 
 // Draw a card from each stack and put it on game table
 function dealCard() {
+  checkWin(war);
   let playerCard = playerDeck.shift();
   let compCard = compDeck.shift();
 
   playerDraw.style.fontSize = "50px";
   compDraw.style.fontSize = "50px";
-  msg.innerHTML = "";
+  warMsg.innerHTML = "";
   playerDraw.innerHTML = `${playerCard.Value}${playerCard.Suit}`;
   compDraw.innerHTML = `${compCard.Value}${compCard.Suit}`;
 
@@ -84,7 +88,8 @@ function dealCard() {
 
   if (playerCardValue === compCardValue) {
     warTempDeck.push(compCard, playerCard);
-    msg.innerHTML = "WAR";
+    warMsg.innerHTML = "WAR";
+    war = true;
     handleWar();
   } else if (playerCardValue > compCardValue) {
     playerScore += 1;
@@ -101,12 +106,13 @@ function dealCard() {
 
 function handleWar() {
   console.log("---WAR---");
+  checkWin(war);
   let playerWarCard = [],
     compWarCard = [];
   let tempDeck = [];
   let playerMax = [{ Value: 0 }];
   let compMax = [{ Value: 0 }];
-
+  draw.disabled = true;
   for (let i = 0; i < 4; i++) {
     playerWarCard.push(playerDeck.shift());
     compWarCard.push(compDeck.shift());
@@ -117,6 +123,7 @@ function handleWar() {
   setTimeout(function () {
     playerDraw.innerHTML = "";
     compDraw.innerHTML = "";
+
     setTimeout(function () {
       playerDraw.style.fontSize = "20px";
       compDraw.style.fontSize = "20px";
@@ -134,7 +141,8 @@ function handleWar() {
       ${compWarCard[compWarCard.length - 1].Value}${
         compWarCard[compWarCard.length - 1].Suit
       }`;
-    }, 2000);
+      draw.disabled = false;
+    }, 1000);
   }, 1000);
 
   // Find the card has biggest number in player's draw
@@ -144,15 +152,13 @@ function handleWar() {
   );
   let compCardValue = convertValue(compWarCard[compWarCard.length - 1].Value);
 
-  let playerWarMax = convertValue(playerMax.Value);
-  let compWarMax = convertValue(compMax.Value);
   // Compare biggest card from each side and determine who wins
-  if (playerWarMax === compWarMax) {
+  if (playerCardValue === compCardValue) {
     // If biggest number are the same,
     // Store cards played on this round into temporary array and run the war again
     warTempDeck.concat(tempDeck);
     handleWar();
-  } else if (playerWarMax > compWarMax) {
+  } else if (playerCardValue > compCardValue) {
     // Merge cards played on war round into player's deck
     playerDeck = playerDeck.concat(tempDeck);
     playerDeck = playerDeck.concat(warTempDeck);
@@ -190,23 +196,35 @@ function convertValue(cardValue) {
   cardValue = parseInt(cardValue, 10);
   return cardValue;
 }
-function checkWin() {
-  if (playerDeck.length === 0) {
-    msg.innerHTML = "Player Wins";
-  }
-  if (compDeck.length === 0) {
-    msg.innerHTML = "Computer Wins";
+function checkWin(war) {
+  if (!war) {
+    if (playerDeck.length === 0) {
+      msg.innerHTML = "Player Wins";
+    }
+    if (compDeck.length === 0) {
+      msg.innerHTML = "Computer Wins";
+    }
+  } else {
+    if (playerDeck.length < 4) {
+      msg.innerHTML = "Player Wins";
+    }
+    if (compDeck.length < 4) {
+      msg.innerHTML = "Computer Wins";
+    }
   }
 }
 function newGame() {
   let playerDeck = [],
     compDeck = [];
+  let war = false;
   playerDraw.innerHTML = "";
   compDraw.innerHTML = "";
   scorePlayer.innerHTML = 0;
   scoreComp.innerHTML = 0;
   playerCardsLeft.innerHTML = 0;
   compCardsLeft.innerHTML = 0;
+  msg.innerHTML = "";
+  warMsg.innerHTML = "";
 }
 
 buildNewDeck();
