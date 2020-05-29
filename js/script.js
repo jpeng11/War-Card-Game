@@ -72,6 +72,9 @@ function dealCard() {
   let playerCard = playerDeck.shift();
   let compCard = compDeck.shift();
 
+  playerDraw.style.fontSize = "50px";
+  compDraw.style.fontSize = "50px";
+  msg.innerHTML = "";
   playerDraw.innerHTML = `${playerCard.Value}${playerCard.Suit}`;
   compDraw.innerHTML = `${compCard.Value}${compCard.Suit}`;
 
@@ -81,6 +84,7 @@ function dealCard() {
 
   if (playerCardValue === compCardValue) {
     warTempDeck.push(compCard, playerCard);
+    msg.innerHTML = "WAR";
     handleWar();
   } else if (playerCardValue > compCardValue) {
     playerScore += 1;
@@ -96,37 +100,49 @@ function dealCard() {
 }
 
 function handleWar() {
+  console.log("---WAR---");
   let playerWarCard = [],
     compWarCard = [];
-
-  for (let i = 0; i < 3; i++) {
-    playerWarCard.push(playerDeck.shift());
-    compWarCard.push(compDeck.shift());
-  }
-
   let tempDeck = [];
   let playerMax = [{ Value: 0 }];
   let compMax = [{ Value: 0 }];
 
-  // Find the card has biggest number in player's draw
-  for (let i = 0; i < playerWarCard.length; i++) {
-    let playerCardValue = convertValue(playerWarCard[i].Value);
-    let playerMaxValue = convertValue(playerMax[0].Value);
-    if (playerCardValue > playerMaxValue) {
-      playerMax[0] = playerWarCard[i];
-    }
-    tempDeck.push(playerWarCard[i]);
+  for (let i = 0; i < 4; i++) {
+    playerWarCard.push(playerDeck.shift());
+    compWarCard.push(compDeck.shift());
   }
+  tempDeck = tempDeck.concat(playerWarCard);
+  tempDeck = tempDeck.concat(compWarCard);
 
-  // Find the card has biggest number in computer's draw
-  for (let j = 0; j < compWarCard.length; j++) {
-    let compCardValue = convertValue(compWarCard[j].Value);
-    let compMaxValue = convertValue(compMax[0].Value);
-    if (compCardValue > compMaxValue) {
-      compMax[0] = compWarCard[j];
-    }
-    tempDeck.push(compWarCard[j]);
-  }
+  setTimeout(function () {
+    playerDraw.innerHTML = "";
+    compDraw.innerHTML = "";
+    setTimeout(function () {
+      playerDraw.style.fontSize = "20px";
+      compDraw.style.fontSize = "20px";
+      playerDraw.innerHTML = `
+      Card 1<br/>
+      Card 2<br/>
+      Card 3<br/>
+      ${playerWarCard[playerWarCard.length - 1].Value}${
+        playerWarCard[playerWarCard.length - 1].Suit
+      }`;
+      compDraw.innerHTML = `
+      Card 1<br/>
+      Card 2<br/>
+      Card 3<br/>
+      ${compWarCard[compWarCard.length - 1].Value}${
+        compWarCard[compWarCard.length - 1].Suit
+      }`;
+    }, 2000);
+  }, 1000);
+
+  // Find the card has biggest number in player's draw
+
+  let playerCardValue = convertValue(
+    playerWarCard[playerWarCard.length - 1].Value
+  );
+  let compCardValue = convertValue(compWarCard[compWarCard.length - 1].Value);
 
   let playerWarMax = convertValue(playerMax.Value);
   let compWarMax = convertValue(compMax.Value);

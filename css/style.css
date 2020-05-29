@@ -38,7 +38,7 @@ body {
   height: 100px;
   display: block;
   font-size: 50px;
-  float: right;
+  float: left;
 }
 
 .compDraw {
@@ -46,9 +46,18 @@ body {
   height: 100px;
   display: block;
   font-size: 50px;
-  float: left;
+  float: right;
 }
 
 #draw {
   margin-top: 100px;
+}
+
+#msg {
+  color: red;
+  text-align: center;
+}
+
+#newGame {
+  margin-left: 20px;
 }
