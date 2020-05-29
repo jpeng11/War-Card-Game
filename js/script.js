@@ -105,14 +105,15 @@ function dealCard() {
 }
 
 function handleWar() {
-  console.log("---WAR---");
   checkWin(war);
   let playerWarCard = [],
     compWarCard = [];
   let tempDeck = [];
-  let playerMax = [{ Value: 0 }];
-  let compMax = [{ Value: 0 }];
+  // Disable button to prevent player draw another card
   draw.disabled = true;
+
+  // Draw 3 cards face down and last card face up
+  // compare last card to determine who wins
   for (let i = 0; i < 4; i++) {
     playerWarCard.push(playerDeck.shift());
     compWarCard.push(compDeck.shift());
@@ -120,10 +121,13 @@ function handleWar() {
   tempDeck = tempDeck.concat(playerWarCard);
   tempDeck = tempDeck.concat(compWarCard);
 
+  // Clear draw table
   setTimeout(function () {
     playerDraw.innerHTML = "";
     compDraw.innerHTML = "";
 
+    // Display card, face down cards are display as card X
+    // Only last card will be display
     setTimeout(function () {
       playerDraw.style.fontSize = "20px";
       compDraw.style.fontSize = "20px";
@@ -196,23 +200,31 @@ function convertValue(cardValue) {
   cardValue = parseInt(cardValue, 10);
   return cardValue;
 }
+
+// Check winner
 function checkWin(war) {
   if (!war) {
     if (playerDeck.length === 0) {
       msg.innerHTML = "Player Wins";
+      draw.disabled = true;
     }
     if (compDeck.length === 0) {
       msg.innerHTML = "Computer Wins";
+      draw.disabled = true;
     }
   } else {
     if (playerDeck.length < 4) {
       msg.innerHTML = "Player Wins";
+      draw.disabled = true;
     }
     if (compDeck.length < 4) {
       msg.innerHTML = "Computer Wins";
+      draw.disabled = true;
     }
   }
 }
+
+// New Game button function, reset everything to start
 function newGame() {
   let playerDeck = [],
     compDeck = [];
